@@ -28,6 +28,4 @@ jobs:
       - name: Verify compiler
         shell: bash
         run: |
-          echo "111111 $includePath"
-          echo "=============== $LD_LIBRARY_PATH"
           amxxpc __tests__/compile.sma -i"$includePath" -o"__tests__/test.amxx"
