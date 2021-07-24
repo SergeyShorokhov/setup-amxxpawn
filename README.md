@@ -2,7 +2,7 @@
 
 ![](https://github.com/wopox1337/setup-amxxpawn/workflows/Main%20Workflow/badge.svg)
 
-This action sets-up, cache and adds sourcemod scripting directory to the path
+This action sets-up, cache and adds amxmodx scripting directory to the path
 
 # Usage
 
