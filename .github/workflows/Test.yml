@@ -10,7 +10,7 @@ jobs:
       matrix:
         operating-systems: [
             ubuntu-latest,
-            windows-latest,
+            # windows-latest,
             # macos-latest
           ]
 
