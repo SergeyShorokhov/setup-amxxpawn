@@ -5,7 +5,7 @@
     "@types/node": "^18.11.6",
     "@types/semver": "^7.3.13",
     "await-to-js": "^3.0.0",
-    "semver": "^7.3.8",
+    "semver": "^7.4.0",
     "typed-rest-client": "^1.8.9"
   }
 }
