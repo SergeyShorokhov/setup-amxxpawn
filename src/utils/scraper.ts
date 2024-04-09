@@ -23,6 +23,8 @@ export async function getVersions(): Promise<Versions> {
     let match, promises: Promise<void>[] = [];
 
     while ((match = MM_REGEX.exec(body)) !== null) {
+        console.log('match:')
+        console.dir(match)
         match[1] = match[1].replace('/', '');
 
         if (match[1].length <= 0) {
