@@ -20,7 +20,7 @@ outputs:
   version-file:
     description: 'Version of the .sma file'
 runs:
-  using: 'node16'
+  using: 'node20'
   main: 'lib/index.js'
 branding:
   icon: 'command'  
