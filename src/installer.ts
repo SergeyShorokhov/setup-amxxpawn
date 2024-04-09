@@ -7,13 +7,13 @@ import { join as pathJoin } from 'path';
 import { getVersions } from './utils/scraper';
 import { Version } from './structures/versioning';
 
-const CACHE_KEY = 'sourcepawn';
+const CACHE_KEY = 'amxxpawn';
 let versions: { [x: string]: Version | { toEndpoint: () => string; }; };
 
 export async function installCompiler(range: string): Promise<string> {
     versions = await getVersions();
 
-    let version = maxSatisfying(Object.keys(versions), range);
+    let version = maxSatisfying(Object.keys(versions), range);    
 
     if (version === null) {
         throw new Error(`Unable to find a version matching ${range}`);
@@ -26,36 +26,38 @@ export async function installCompiler(range: string): Promise<string> {
     }
 
     // Workaround for https://github.com/rumblefrog/setup-sp/issues/5
-    // We use a proxy script to call the original spcomp64 and include the path to the compiler
+    // We use a proxy script to call the original amxxpc and include the path to the compiler
     if (
         !(
-            getBooleanInput('no-spcomp-proxy', { required: false })
-            || process.env.NO_SPCOMP_PROXY
+            getBooleanInput('no-amxxpc-proxy', { required: false })
+            || process.env.NO_AMXXPC_PROXY
         ) &&
-        process.platform == 'linux' && !existsSync(pathJoin(cache, 'spcomp64_original'))
+        process.platform == 'linux' && !existsSync(pathJoin(cache, 'amxxpc_original'))
     ) {
-        await rename(pathJoin(cache, 'spcomp64'), pathJoin(cache, 'spcomp64_original'));
-        await rename(pathJoin(cache, 'spcomp'), pathJoin(cache, 'spcomp_original'));
+        await rename(pathJoin(cache, 'amxxpc'), pathJoin(cache, 'amxxpc_original'));
 
+        console.log('cache:${cache}');
+        
         const proxy_script = `
         #!/bin/bash
-        ${pathJoin(cache, 'spcomp64_original')} -i${pathJoin(cache, 'include')} $@
+
+        ${pathJoin(cache, 'amxxpc_original')} -i${pathJoin(cache, 'include')} $@
         `;
 
-        await writeFile(pathJoin(cache, 'spcomp'), proxy_script, { mode: 0o755 });
-        await writeFile(pathJoin(cache, 'spcomp64'), proxy_script, { mode: 0o755 });
+        await writeFile(pathJoin(cache, 'amxxpc'), proxy_script, { mode: 0o755 });
     }
-
+   
     addPath(cache);
     exportVariable('scriptingPath', pathJoin(cache));
     exportVariable('includePath', pathJoin(cache, 'include'));
+    exportVariable('LD_LIBRARY_PATH', cache);
 
     return version;
 }
 
 async function downloadCompiler(version: string) {
     const spPath = await downloadTool(versions[version].toEndpoint());
-    
+
     let extracted: string;
 
     if (process.platform === 'linux') {
@@ -64,7 +66,7 @@ async function downloadCompiler(version: string) {
         extracted = await extractZip(spPath);
     }
 
-    const spRoot = pathJoin(extracted, 'addons', 'sourcemod', 'scripting');
+    const spRoot = pathJoin(extracted, 'addons', 'amxmodx', 'scripting');
 
     return await cacheDir(spRoot, CACHE_KEY, version);
 }
