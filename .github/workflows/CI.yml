@@ -1,0 +1,41 @@
+name: Setup and test AMXXPawn
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  run:
+    name: Run action
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        amxxVersion: ['1.10.x', '1.9.x']
+
+    steps:
+    - uses: actions/checkout@v4.1.1
+    
+    - name: Setup AMXXPawn Compiler (local action)
+      if: github.event_name == 'pull_request'
+      uses: ./
+      with:
+        version: ${{ matrix.amxxVersion }}
+    
+    - name: Setup AMXXPawn Compiler (master)
+      if: github.event_name != 'pull_request'
+      uses: wopox1337/setup-amxxpawn@master
+      with:
+        version: ${{ matrix.amxxVersion }}
+      
+    - name: Verify compiler
+      run: |
+        echo "which amxxpc: $(which amxxpc)"
+        echo "includePath directory list: $includePath"
+        ls -l $includePath
+
+        echo "scriptingPath directory list: $scriptingPath"
+        ls -l $scriptingPath
+
+        amxxpc __tests__/compile.sma
