@@ -7,7 +7,7 @@ import { join as pathJoin } from 'path';
 import { getVersions } from './utils/scraper';
 import { Version } from './structures/versioning';
 
-const CACHE_KEY = 'sourcepawn';
+const CACHE_KEY = 'amxxpawn';
 let versions: { [x: string]: Version | { toEndpoint: () => string; }; };
 
 export async function installCompiler(range: string): Promise<string> {
@@ -33,17 +33,17 @@ export async function installCompiler(range: string): Promise<string> {
 }
 
 async function downloadCompiler(version: string) {
-    const spPath = await downloadTool(versions[version].toEndpoint());
+    const amxxPath = await downloadTool(versions[version].toEndpoint());
     
     let extracted: string;
 
     if (process.platform === 'linux') {
-        extracted = await extractTar(spPath);
+        extracted = await extractTar(amxxPath);
     } else {
-        extracted = await extractZip(spPath);
+        extracted = await extractZip(amxxPath);
     }
 
-    const spRoot = pathJoin(extracted, 'addons', 'sourcemod', 'scripting');
+    const amxxRoot = pathJoin(extracted, 'addons', 'amxmodx', 'scripting');
 
-    return await cacheDir(spRoot, CACHE_KEY, version);
+    return await cacheDir(amxxRoot, CACHE_KEY, version);
 }
