@@ -19,7 +19,7 @@ export async function getVersions(): Promise<Versions> {
     }
 
     const body = await res.readBody();
-
+    console.dir(body)
     let match, promises: Promise<void>[] = [];
 
     while ((match = MM_REGEX.exec(body)) !== null) {

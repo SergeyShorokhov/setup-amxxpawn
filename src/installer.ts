@@ -12,6 +12,7 @@ let versions: { [x: string]: Version | { toEndpoint: () => string; }; };
 
 export async function installCompiler(range: string): Promise<string> {
     versions = await getVersions();
+    console.dir(versions);
 
     console.log(`installCompiler(): versions: ${Object.keys(versions)}, range: ${range}`);
     let version = maxSatisfying(Object.keys(versions), range);
