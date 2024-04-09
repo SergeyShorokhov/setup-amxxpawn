@@ -1,11 +1,11 @@
-name: 'Setup SourcePawn Compiler'
-author: 'rumblefrog'
-description: 'Install and setup SourcePawn compiler'
+name: 'Setup AMXXPawn Compiler'
+author: 'wopox1337'
+description: 'Install and setup AMXXPawn compiler'
 inputs:
   version:
-    description: 'Version of SP compiler'
+    description: 'Version of AMXXPawn compiler'
     required: true
-    default: '1.10.x'
+    default: '1.9.x'
   version-file:
     description: 'File to parse to get the version of the plugin'
     required: false
@@ -16,9 +16,9 @@ inputs:
     default: ''
 outputs:
   version:
-    description: 'Version of the SP compiler used'
+    description: 'Version of the AMXXPawn compiler used'
   version-file:
-    description: 'Version of the .sp file'
+    description: 'Version of the .sma file'
 runs:
   using: 'node16'
   main: 'lib/index.js'
