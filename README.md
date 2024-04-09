@@ -1,24 +1,24 @@
-# Setup SourcePawn Action
+# Setup AMXXPawn Action
 
-![](https://github.com/rumblefrog/setup-sp/workflows/Main%20Workflow/badge.svg)
+![](https://github.com/wopox1337/setup-amxxpawn/workflows/Main%20Workflow/badge.svg)
 
-This action sets-up, cache and adds sourcemod scripting directory to the path
+This action sets-up, cache and adds amxmodx scripting directory to the path
 
 # Usage
 
-See [action.yml](https://github.com/rumblefrog/setup-sp/blob/master/action.yml)
+See [action.yml](https://github.com/wopox1337/setup-amxxpawn/blob/master/action.yml)
 
 ## Basic:
 
 ```yaml
 steps:
-- uses: actions/checkout@v3
+- uses: actions/checkout@v4
 
-- uses: rumblefrog/setup-sp@master
+- uses: wopox1337/setup-amxxpawn@master
   with:
-    version: '1.12.x'
+    version: '1.9.x'
 
-- run: spcomp -iAnotherIncludeDirectory plugin.sp -o output/plugin.smx
+- run: amxxpc -iAnotherIncludeDirectory plugin.sma -o output/plugin.amxx
 ```
 
 ## Matrix:
@@ -29,41 +29,39 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        sm-version: [ '1.11.x', '1.12.x', '1.11.6467', '>= 1.11.6478']
+        sm-version: [ '1.9.x', '1.10.x', '1.10.5466', '>= 1.10.5466']
 
-    name: SM version ${{ matrix.sm-version }}
+    name: AMXModX version ${{ matrix.sm-version }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - name: Setup SP
-        uses: rumblefrog/setup-sp@master
+      - name: Setup AMXPawn
+        uses: wopox1337/setup-amxxpawn@master
         with:
           version: ${{ matrix.sm-version }}
 
-      - run: spcomp -iAnotherIncludeDirectory plugin.sp -o output/plugin.smx
+      - run: amxxpc -iAnotherIncludeDirectory plugin.sma -o output/plugin.amxx
 ```
 
-## Extract the version of the .sp file:
+## Extract the version of the .sma file:
 
 ```yaml
 jobs:
   build:
     runs-on: ubuntu-latest
 
-    name: SM version ${{ matrix.sm-version }}
+    name: AMXModX version ${{ matrix.sm-version }}
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v4
 
-      - name: Setup SP
-        id: setup_sp
-        uses: rumblefrog/setup-sp@master
+      - name: Setup AMXXPawn
+        id: setup_amxxpawn
+        uses: wopox1337/setup-amxxpawn@master
         with:
           version: '1.10.x'
-          version-file: ./plugin.sp
+          version-file: ./plugin.sma
 
       - run: |
-          spcomp -iAnotherIncludeDirectory plugin.sp -o output/plugin.smx
-          echo Plugin version ${{ steps.setup_sp.outputs.plugin-version }}
+          amxxpc -iAnotherIncludeDirectory plugin.sma -o output/plugin.amxx
+          echo Plugin version ${{ steps.setup_amxxpawn.outputs.plugin-version }}
 ```
-
-A complete workflow example can be found [here](https://github.com/Sarrus1/DiscordWebhookAPI/blob/master/.github/workflows/master.yml).
