@@ -25,27 +25,6 @@ export async function installCompiler(range: string): Promise<string> {
         cache = await downloadCompiler(version);
     }
 
-    // Workaround for https://github.com/rumblefrog/setup-sp/issues/5
-    // We use a proxy script to call the original spcomp64 and include the path to the compiler
-    if (
-        !(
-            getBooleanInput('no-spcomp-proxy', { required: false })
-            || process.env.NO_SPCOMP_PROXY
-        ) &&
-        process.platform == 'linux' && !existsSync(pathJoin(cache, 'spcomp64_original'))
-    ) {
-        await rename(pathJoin(cache, 'spcomp64'), pathJoin(cache, 'spcomp64_original'));
-        await rename(pathJoin(cache, 'spcomp'), pathJoin(cache, 'spcomp_original'));
-
-        const proxy_script = `
-        #!/bin/bash
-        ${pathJoin(cache, 'spcomp64_original')} -i${pathJoin(cache, 'include')} $@
-        `;
-
-        await writeFile(pathJoin(cache, 'spcomp'), proxy_script, { mode: 0o755 });
-        await writeFile(pathJoin(cache, 'spcomp64'), proxy_script, { mode: 0o755 });
-    }
-
     addPath(cache);
     exportVariable('scriptingPath', pathJoin(cache));
     exportVariable('includePath', pathJoin(cache, 'include'));
